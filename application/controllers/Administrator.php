@@ -241,58 +241,58 @@ class Administrator extends CI_Controller
         $this->form_validation->set_rules('id_procedure', 'id_procedure', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
-
+    // region jobvacancy
     public function jobvacancy()
     {
-        cek_session_admin();
-        $this->load->model('Jobvacancy_model');
-        $q = urldecode($this->input->get('q', TRUE));
-        $start = intval($this->input->get('start'));
+      cek_session_admin();
+      $this->load->model('Jobvacancy_model');
+      $q = urldecode($this->input->get('q', TRUE));
+      $start = intval($this->input->get('start'));
 
-        if ($q != '') {
-            $config['base_url'] = base_url() . 'administrator/jobvacancy?q=' . urlencode($q);
-            $config['first_url'] = base_url() . 'administrator/jobvacancy?q=' . urlencode($q);
-        } else {
-            $config['base_url'] = base_url() . 'administrator/jobvacancy';
-            $config['first_url'] = base_url() . 'administrator/jobvacancy';
-        }
+      if ($q != '') {
+        $config['base_url'] = base_url() . 'administrator/jobvacancy?q=' . urlencode($q);
+        $config['first_url'] = base_url() . 'administrator/jobvacancy?q=' . urlencode($q);
+      } else {
+        $config['base_url'] = base_url() . 'administrator/jobvacancy';
+        $config['first_url'] = base_url() . 'administrator/jobvacancy';
+      }
 
-        $config['per_page'] = 10;
-        $config['page_query_string'] = TRUE;
-        $config['total_rows'] = $this->Jobvacancy_model->total_rows_jobvacancy($q);
-        $jobvacancy = $this->Jobvacancy_model->get_limit_data_jobvacancy($config['per_page'], $start, $q);
+      $config['per_page'] = 10;
+      $config['page_query_string'] = TRUE;
+      $config['total_rows'] = $this->Jobvacancy_model->total_rows_jobvacancy($q);
+      $jobvacancy = $this->Jobvacancy_model->get_limit_data_jobvacancy($config['per_page'], $start, $q);
 
-        $this->load->library('pagination');
-        $this->pagination->initialize($config);
+      $this->load->library('pagination');
+      $this->pagination->initialize($config);
 
-        $data = array(
-            'jobvacancy_data' => $jobvacancy,
-            'q' => $q,
-            'pagination' => $this->pagination->create_links(),
-            'total_rows' => $config['total_rows'],
-            'start' => $start,
-            'page' => 'Job Vacancy'
-        );
-        $this->template->load('administrator/template', 'administrator/view_jobvacancy_list', $data);
+      $data = array(
+        'jobvacancy_data' => $jobvacancy,
+        'q' => $q,
+        'pagination' => $this->pagination->create_links(),
+        'total_rows' => $config['total_rows'],
+        'start' => $start,
+        'page' => 'Job Vacancy'
+      );
+      $this->template->load('administrator/template', 'administrator/view_jobvacancy_list', $data);
     }
 
     public function jobvacancy_create()
     {
-        cek_session_admin();
-        $data = array(
-            'button' => 'Create',
-            'action' => site_url('administrator/jobvacancy_create_action'),
-            'id_jobs' => set_value('id_jobs'),
-            'name_jobs' => set_value('name_jobs'),
-            'id_company' => set_value('id_company'),
-            'job_description' => set_value('job_description'),
-            'job_requerement' => set_value('job_requerement'),
-            'benefits' => set_value('benefits'),
-            'status_jobs' => set_value('status_jobs'),
-            'time_active_jobs' => set_value('time_active_jobs'),
-            'page' => 'Job Vacancy'
-        );
-        $this->template->load('administrator/template', 'administrator/view_jobvacancy_form', $data);
+      cek_session_admin();
+      $data = array(
+        'button' => 'Create',
+        'action' => site_url('administrator/jobvacancy_create_action'),
+        'id_jobs' => set_value('id_jobs'),
+        'name_jobs' => set_value('name_jobs'),
+        'id_company' => set_value('id_company'),
+        'job_description' => set_value('job_description'),
+        'job_requerement' => set_value('job_requerement'),
+        'benefits' => set_value('benefits'),
+        'status_jobs' => set_value('status_jobs'),
+        'time_active_jobs' => set_value('time_active_jobs'),
+        'page' => 'Job Vacancy'
+      );
+      $this->template->load('administrator/template', 'administrator/view_jobvacancy_form', $data);
     }
 
     public function jobvacancy_create_action()
@@ -405,7 +405,158 @@ class Administrator extends CI_Controller
         $this->form_validation->set_rules('id_jobs', 'id_jobs', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
+    //Endregion jobvacancy
 
+    // region Company
+    public function company()
+    {
+      cek_session_admin();
+      $this->load->model('Company_model');
+      $q = urldecode($this->input->get('q', TRUE));
+      $start = intval($this->input->get('start'));
+
+      if ($q <> '') {
+        $config['base_url'] = base_url() . 'administrator/company?q=' . urlencode($q);
+        $config['first_url'] = base_url() . 'administrator/company?q=' . urlencode($q);
+      } else {
+        $config['base_url'] = base_url() . 'administrator/company';
+        $config['first_url'] = base_url() . 'administrator/company';
+      }
+
+      $config['per_page'] = 10;
+      $config['page_query_string'] = TRUE;
+      $config['total_rows'] = $this->Company_model->total_rows_company($q);
+      $company = $this->Company_model->get_company_limit_data($config['per_page'], $start, $q);
+
+      $this->load->library('pagination');
+      $this->pagination->initialize($config);
+
+      $data = array(
+          'company_data' => $company,
+          'q' => $q,
+          'pagination' => $this->pagination->create_links(),
+          'total_rows' => $config['total_rows'],
+          'start' => $start,
+          'page' => 'Company',
+      );
+      $this->template->load('administrator/template', 'administrator/view_company_list', $data);
+    }
+
+    public function company_create()
+    {
+      cek_session_admin();
+      $this->load->model('Company_model');
+      $data = array(
+        'button' => 'Create',
+        'action' => site_url('administrator/company_create_action'),
+        'id_company' => set_value('id_company'),
+        'name_company' => set_value('name_company'),
+        'address_company' => set_value('address_company'),
+        'tlp_company' => set_value('tlp_company'),
+        'email_company' => set_value('email_company'),
+        'page' => 'Company',
+      );
+      $this->template->load('administrator/template', 'administrator/view_company_form', $data);
+    }
+
+    public function company_create_action()
+    {
+      cek_session_admin();
+      $this->load->model('Company_model');
+      $this->company_rules();
+
+      if ($this->form_validation->run() == FALSE) {
+        $this->company_create();
+      } else {
+        $data = array(
+        'name_company' => $this->input->post('name_company',TRUE),
+        'address_company' => $this->input->post('address_company',TRUE),
+        'tlp_company' => $this->input->post('tlp_company',TRUE),
+        'email_company' => $this->input->post('email_company',TRUE),
+        );
+
+        $this->Company_model->insert_company($data);
+        $this->session->set_flashdata('message', 'Create Record Success');
+        redirect(site_url('administrator/company'));
+      }
+    }
+
+    public function company_update($id)
+    {
+      cek_session_admin();
+      $this->load->model('Company_model');
+      $row = $this->Company_model->get_company_by_id($id);
+
+      if ($row) {
+        $data = array(
+          'button' => 'Update',
+          'action' => site_url('administrator/company_update_action'),
+          'id_company' => set_value('id_company', $row->id_company),
+          'name_company' => set_value('name_company', $row->name_company),
+          'address_company' => set_value('address_company', $row->address_company),
+          'tlp_company' => set_value('tlp_company', $row->tlp_company),
+          'email_company' => set_value('email_company', $row->email_company),
+          'page' => 'Company',
+        );
+        $this->template->load('administrator/template', 'administrator/view_company_form', $data);
+      } else {
+        $this->session->set_flashdata('message', 'Record Not Found');
+        redirect(site_url('administrator/company'));
+      }
+    }
+
+    public function company_update_action()
+    {
+      cek_session_admin();
+      $this->load->model('Company_model');
+      $this->company_rules();
+
+      if ($this->form_validation->run() == FALSE) {
+        $this->update_company($this->input->post('', TRUE));
+      } else {
+        $data = array(
+        	'name_company' => $this->input->post('name_company',TRUE),
+        	'address_company' => $this->input->post('address_company',TRUE),
+        	'tlp_company' => $this->input->post('tlp_company',TRUE),
+        	'email_company' => $this->input->post('email_company',TRUE),
+        );
+
+        $this->Company_model->update_company($this->input->post('id_company', TRUE), $data);
+        $this->session->set_flashdata('message', 'Update Record Success');
+        redirect(site_url('administrator/company'));
+      }
+    }
+
+    public function company_delete($id)
+    {
+      cek_session_admin();
+      $this->load->model('Company_model');
+      $row = $this->Company_model->get_company_by_id($id);
+
+      if ($row) {
+        $this->Company_model->delete_company($id);
+        $this->session->set_flashdata('message', 'Delete Record Success');
+        redirect(site_url('administrator/company'));
+      } else {
+        $this->session->set_flashdata('message', 'Record Not Found');
+        redirect(site_url('administrator/company'));
+      }
+    }
+
+    public function company_rules()
+    {
+    	//$this->form_validation->set_rules('id_company', 'id company', 'trim|required');
+    	$this->form_validation->set_rules('name_company', 'name company', 'trim|required');
+    	$this->form_validation->set_rules('address_company', 'address company', 'trim|required');
+    	$this->form_validation->set_rules('tlp_company', 'tlp company', 'trim|required');
+    	$this->form_validation->set_rules('email_company', 'email company', 'trim|required');
+
+    	$this->form_validation->set_rules('', '', 'trim');
+    	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
+    }
+    // Endregion Company
+
+    // region Galery
     public function galery()
     {
         cek_session_admin();
@@ -562,8 +713,10 @@ class Administrator extends CI_Controller
         $this->form_validation->set_rules('id_galery', 'id_galery', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
-
+    // Endregion Galery
     // @author region member
+
+    // region Member
     public function member()
     {
         cek_session_admin();
