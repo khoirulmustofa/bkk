@@ -21,7 +21,7 @@ class Aboutus_model extends CI_Model
         $this->db->order_by('id_aboutus', 'ASC');
         return $this->db->get('km_aboutus')->result();
     }
-    
+
     // get data by id
     function get_aboutus_by_id($id)
     {
@@ -53,5 +53,24 @@ class Aboutus_model extends CI_Model
         $this->db->limit($limit, $start);
         return $this->db->get('km_aboutus')->result();
     }
-}
 
+    // insert data
+    function insert_aboutus($data)
+    {
+        $this->db->insert('km_aboutus', $data);
+    }
+
+    // update data
+    function update_aboutus($id, $data)
+    {
+        $this->db->where('id_aboutus', $id);
+        $this->db->update('km_aboutus', $data);
+    }
+
+    // delete data
+    function delete_aboutus($id)
+    {
+        $this->db->where('id_aboutus', $id);
+        $this->db->delete('km_aboutus');
+    }
+}

@@ -19,7 +19,7 @@ class Administrator extends CI_Controller
             'password' => set_value('password'),
             'page' => 'Login'
         );
-        
+
         $this->load->view('administrator/view_login', $data);
     }
 
@@ -27,7 +27,7 @@ class Administrator extends CI_Controller
     {
         $this->load->model('Users_model');
         $this->login__rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->index();
         } else {
@@ -37,7 +37,7 @@ class Administrator extends CI_Controller
                     'username' => $this->input->post('username', TRUE),
                     'password' => $this->input->post('password', TRUE)
                 );
-                
+
                 $hasil = $this->Users_model->get_user_by_username_password($data);
                 // var_dump($hasil);
                 if ($hasil != NULL) {
@@ -73,7 +73,7 @@ class Administrator extends CI_Controller
     {
         $this->form_validation->set_rules('username', 'username', 'trim|required');
         $this->form_validation->set_rules('password', 'password', 'trim|required');
-        
+
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
 
@@ -81,7 +81,7 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Jobvacancy_model');
-        
+
         // $totalJobvacancy=$this->Jobvacancy_model->total_all_procedure_rows();
         $data = array(
             'page' => 'Home',
@@ -94,10 +94,10 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Procedure_model');
-        
+
         $q = urldecode($this->input->get('q', TRUE));
         $start = intval($this->input->get('start'));
-        
+
         if ($q != '') {
             $config['base_url'] = base_url() . 'administrator/procedure/?q=' . urlencode($q);
             $config['first_url'] = base_url() . 'administrator/procedure/?q=' . urlencode($q);
@@ -105,15 +105,15 @@ class Administrator extends CI_Controller
             $config['base_url'] = base_url() . 'administrator/procedure/';
             $config['first_url'] = base_url() . 'administrator/procedure/';
         }
-        
+
         $config['per_page'] = 10;
         $config['page_query_string'] = TRUE;
         $config['total_rows'] = $this->Procedure_model->total_procedure_rows($q);
         $procedure = $this->Procedure_model->get_procedure_limit_data($config['per_page'], $start, $q);
-        
+
         $this->load->library('pagination');
         $this->pagination->initialize($config);
-        
+
         $data = array(
             'procedure_data' => $procedure,
             'q' => $q,
@@ -122,7 +122,7 @@ class Administrator extends CI_Controller
             'start' => $start,
             'page' => 'Procedure'
         );
-        
+
         $this->template->load('administrator/template', 'administrator/view_procedure_list', $data);
     }
 
@@ -130,7 +130,7 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Procedure_model');
-        
+
         $data = array(
             'button' => 'Create',
             'action' => site_url('administrator/procedure_create_action'),
@@ -148,9 +148,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Procedure_model');
-        
+
         $this->procedure_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->procedure_create();
         } else {
@@ -160,7 +160,7 @@ class Administrator extends CI_Controller
                 'icon_procedure' => $this->input->post('icon_procedure', TRUE),
                 'back_color' => $this->input->post('back_color', TRUE)
             );
-            
+
             $this->Procedure_model->insert_procedure($data);
             $this->session->set_flashdata('message', 'Create Record Success');
             redirect(site_url('administrator/procedure'));
@@ -171,9 +171,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Procedure_model');
-        
+
         $row = $this->Procedure_model->get_procedure_by_id($id);
-        
+
         if ($row) {
             $data = array(
                 'button' => 'Update',
@@ -196,9 +196,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Procedure_model');
-        
+
         $this->procedure_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->procedure_update($this->input->post('id_procedure', TRUE));
         } else {
@@ -208,7 +208,7 @@ class Administrator extends CI_Controller
                 'icon_procedure' => $this->input->post('icon_procedure', TRUE),
                 'back_color' => $this->input->post('back_color', TRUE)
             );
-            
+
             $this->Procedure_model->update_procedure($this->input->post('id_procedure', TRUE), $data);
             $this->session->set_flashdata('message', 'Update Record Success');
             redirect(site_url('administrator/procedure'));
@@ -220,7 +220,7 @@ class Administrator extends CI_Controller
         cek_session_admin();
         $this->load->model('Procedure_model');
         $row = $this->Procedure_model->get_procedure_by_id($id);
-        
+
         if ($row) {
             $this->Procedure_model->delete_procedure($id);
             $this->session->set_flashdata('message', 'Delete Record Success');
@@ -237,7 +237,7 @@ class Administrator extends CI_Controller
         $this->form_validation->set_rules('decription_procedure', 'decription procedure', 'trim|required');
         $this->form_validation->set_rules('icon_procedure', 'icon procedure', 'trim|required');
         $this->form_validation->set_rules('back_color', 'back color', 'trim|required');
-        
+
         $this->form_validation->set_rules('id_procedure', 'id_procedure', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
@@ -248,7 +248,7 @@ class Administrator extends CI_Controller
         $this->load->model('Jobvacancy_model');
         $q = urldecode($this->input->get('q', TRUE));
         $start = intval($this->input->get('start'));
-        
+
         if ($q != '') {
             $config['base_url'] = base_url() . 'administrator/jobvacancy?q=' . urlencode($q);
             $config['first_url'] = base_url() . 'administrator/jobvacancy?q=' . urlencode($q);
@@ -256,15 +256,15 @@ class Administrator extends CI_Controller
             $config['base_url'] = base_url() . 'administrator/jobvacancy';
             $config['first_url'] = base_url() . 'administrator/jobvacancy';
         }
-        
+
         $config['per_page'] = 10;
         $config['page_query_string'] = TRUE;
         $config['total_rows'] = $this->Jobvacancy_model->total_rows_jobvacancy($q);
         $jobvacancy = $this->Jobvacancy_model->get_limit_data_jobvacancy($config['per_page'], $start, $q);
-        
+
         $this->load->library('pagination');
         $this->pagination->initialize($config);
-        
+
         $data = array(
             'jobvacancy_data' => $jobvacancy,
             'q' => $q,
@@ -299,9 +299,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Jobvacancy_model');
-        
+
         $this->jobvacancy_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->jobvacancy_create();
         } else {
@@ -314,7 +314,7 @@ class Administrator extends CI_Controller
                 'status_jobs' => $this->input->post('status_jobs', TRUE),
                 'time_active_jobs' => $this->input->post('time_active_jobs', TRUE)
             );
-            
+
             $this->Jobvacancy_model->insert_jobvacancy($data);
             $this->session->set_flashdata('message', 'Create Record Success');
             redirect(site_url('administrator/jobvacancy'));
@@ -325,9 +325,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Jobvacancy_model');
-        
+
         $row = $this->Jobvacancy_model->get_jobvacancy_by_id($id);
-        
+
         if ($row) {
             $data = array(
                 'button' => 'Update',
@@ -353,9 +353,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Jobvacancy_model');
-        
+
         $this->jobvacancy_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->update($this->input->post('id_jobs', TRUE));
         } else {
@@ -368,7 +368,7 @@ class Administrator extends CI_Controller
                 'status_jobs' => $this->input->post('status_jobs', TRUE),
                 'time_active_jobs' => $this->input->post('time_active_jobs', TRUE)
             );
-            
+
             $this->Jobvacancy_model->update_jobvacancy($this->input->post('id_jobs', TRUE), $data);
             $this->session->set_flashdata('message', 'Update Record Success');
             redirect(site_url('administrator/jobvacancy'));
@@ -379,9 +379,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Jobvacancy_model');
-        
+
         $row = $this->Jobvacancy_model->get_jobvacancy_by_id($id);
-        
+
         if ($row) {
             $this->Jobvacancy_model->delete_jobvacancy($id);
             $this->session->set_flashdata('message', 'Delete Jobvacancy Success');
@@ -401,7 +401,7 @@ class Administrator extends CI_Controller
         $this->form_validation->set_rules('benefits', 'benefits', 'trim|required');
         $this->form_validation->set_rules('status_jobs', 'status jobs', 'trim|required');
         $this->form_validation->set_rules('time_active_jobs', 'time active jobs', 'trim|required');
-        
+
         $this->form_validation->set_rules('id_jobs', 'id_jobs', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
@@ -410,10 +410,10 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Galery_model');
-        
+
         $q = urldecode($this->input->get('q', TRUE));
         $start = intval($this->input->get('start'));
-        
+
         if ($q != '') {
             $config['base_url'] = base_url() . 'administrator/galery/?q=' . urlencode($q);
             $config['first_url'] = base_url() . 'administrator/galery/?q=' . urlencode($q);
@@ -421,15 +421,15 @@ class Administrator extends CI_Controller
             $config['base_url'] = base_url() . 'administrator/galery/';
             $config['first_url'] = base_url() . 'administrator/galery/';
         }
-        
+
         $config['per_page'] = 10;
         $config['page_query_string'] = TRUE;
         $config['total_rows'] = $this->Galery_model->total_rows($q);
         $galery = $this->Galery_model->get_limit_data($config['per_page'], $start, $q);
-        
+
         $this->load->library('pagination');
         $this->pagination->initialize($config);
-        
+
         $data = array(
             'galery_data' => $galery,
             'q' => $q,
@@ -438,7 +438,7 @@ class Administrator extends CI_Controller
             'start' => $start,
             'page' => 'Galery'
         );
-        
+
         $this->template->load('administrator/template', 'administrator/view_galery_list', $data);
     }
 
@@ -460,9 +460,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Galery_model');
-        
+
         $this->galery_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->galery_create();
         } else {
@@ -476,7 +476,7 @@ class Administrator extends CI_Controller
                 'name_galery' => ucwords($this->input->post('name_galery', TRUE)),
                 'patch_galery' => $hasil['file_name']
             );
-            
+
             $this->Galery_model->insert_galery($data);
             $this->session->set_flashdata('message', 'Create Record Success');
             redirect(site_url('administrator/galery'));
@@ -487,9 +487,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Galery_model');
-        
+
         $row = $this->Galery_model->get_galery_by_id($id);
-        
+
         if ($row) {
             $data = array(
                 'button' => 'Update',
@@ -510,9 +510,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Galery_model');
-        
+
         $this->galery_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->galery_update($this->input->post('id_galery', TRUE));
         } else {
@@ -528,7 +528,7 @@ class Administrator extends CI_Controller
             } else {
                 $data['name_galery'] = ucwords($this->input->post('name_galery', TRUE));
             }
-            
+
             $this->Galery_model->update_galery($this->input->post('id_galery', TRUE), $data);
             // var_dump($data, $hasil['file_name']);
             $this->session->set_flashdata('message', 'Update Record Success');
@@ -540,11 +540,11 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Galery_model');
-        
+
         $row = $this->Galery_model->get_galery_by_id($id);
-        
+
         if ($row) {
-            
+
             $this->Galery_model->delete_galery($id);
             $this->session->set_flashdata('message', 'Delete Record Success');
             unlink('assets/galery/' . $row->patch_galery);
@@ -558,7 +558,7 @@ class Administrator extends CI_Controller
     public function galery_rules()
     {
         $this->form_validation->set_rules('name_galery', 'name galery', 'trim|required');
-        
+
         $this->form_validation->set_rules('id_galery', 'id_galery', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
@@ -568,10 +568,10 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Member_model');
-        
+
         $q = urldecode($this->input->get('q', TRUE));
         $start = intval($this->input->get('start'));
-        
+
         if ($q != '') {
             $config['base_url'] = base_url() . 'administrator/member/?q=' . urlencode($q);
             $config['first_url'] = base_url() . 'administrator/member/?q=' . urlencode($q);
@@ -579,15 +579,15 @@ class Administrator extends CI_Controller
             $config['base_url'] = base_url() . 'administrator/member/';
             $config['first_url'] = base_url() . 'administrator/member/';
         }
-        
+
         $config['per_page'] = 10;
         $config['page_query_string'] = TRUE;
         $config['total_rows'] = $this->Member_model->total_member_rows($q);
         $member = $this->Member_model->get_member_limit_data($config['per_page'], $start, $q);
-        
+
         $this->load->library('pagination');
         $this->pagination->initialize($config);
-        
+
         $data = array(
             'member_data' => $member,
             'q' => $q,
@@ -623,7 +623,7 @@ class Administrator extends CI_Controller
         cek_session_admin();
         $this->load->model('Member_model');
         $this->member_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->member_create();
         } else {
@@ -636,7 +636,7 @@ class Administrator extends CI_Controller
                 'place_ofbirth_member' => $this->input->post('place_ofbirth_member', TRUE),
                 'date_ofbirth_member' => $this->input->post('date_ofbirth_member', TRUE)
             );
-            
+
             $this->Member_model->insert_member($data);
             $this->session->set_flashdata('message', 'Create Record Success');
             redirect(site_url('administrator/member'));
@@ -647,9 +647,9 @@ class Administrator extends CI_Controller
     {
         cek_session_admin();
         $this->load->model('Member_model');
-        
+
         $row = $this->Member_model->get_member_by_id_member($id);
-        
+
         if ($row) {
             $data = array(
                 'button' => 'Update',
@@ -676,7 +676,7 @@ class Administrator extends CI_Controller
         cek_session_admin();
         $this->load->model('Member_model');
         $this->member_rules();
-        
+
         if ($this->form_validation->run() == FALSE) {
             $this->member_update($this->input->post('id_member', TRUE));
         } else {
@@ -688,11 +688,11 @@ class Administrator extends CI_Controller
                 'place_ofbirth_member' => $this->input->post('place_ofbirth_member', TRUE),
                 'date_ofbirth_member' => $this->input->post('date_ofbirth_member', TRUE)
             );
-            
+
             if ($this->input->post('cek_password', TRUE) == "check") {
                 $data['password_member'] = crypt(md5($this->input->post('password_member', TRUE)), 'kh0itul3ustof4');
             }
-            
+
             // var_dump($data);
             $this->Member_model->update_member($this->input->post('id_member', TRUE), $data);
             $this->session->set_flashdata('message', 'Update Record Success');
@@ -709,7 +709,7 @@ class Administrator extends CI_Controller
         $this->form_validation->set_rules('address_member', 'address member', 'trim|required');
         $this->form_validation->set_rules('place_ofbirth_member', 'place ofbirth member', 'trim|required');
         $this->form_validation->set_rules('date_ofbirth_member', 'date ofbirth member', 'trim|required');
-        
+
         $this->form_validation->set_rules('id_member', 'id_member', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
@@ -720,7 +720,7 @@ class Administrator extends CI_Controller
         $this->load->model('Aboutus_model');
         $q = urldecode($this->input->get('q', TRUE));
         $start = intval($this->input->get('start'));
-        
+
         if ($q != '') {
             $config['base_url'] = base_url() . 'aboutus/?q=' . urlencode($q);
             $config['first_url'] = base_url() . 'aboutus/?q=' . urlencode($q);
@@ -728,15 +728,15 @@ class Administrator extends CI_Controller
             $config['base_url'] = base_url() . 'aboutus/';
             $config['first_url'] = base_url() . 'aboutus/';
         }
-        
+
         $config['per_page'] = 10;
         $config['page_query_string'] = TRUE;
         $config['total_rows'] = $this->Aboutus_model->total_rows_aboutus($q);
         $aboutus = $this->Aboutus_model->get_limit_data_aboutus($config['per_page'], $start, $q);
-        
+
         $this->load->library('pagination');
         $this->pagination->initialize($config);
-        
+
         $data = array(
             'aboutus_data' => $aboutus,
             'q' => $q,
@@ -747,28 +747,118 @@ class Administrator extends CI_Controller
         );
         $this->template->load('administrator/template', 'administrator/view_aboutus_list', $data);
     }
-    
+
+    public function aboutus_create()
+    {
+      $this->load->model('Aboutus_model');
+      $data = array(
+        'button' => 'Create',
+        'action' => site_url('administrator/aboutus_create_action'),
+  	    'id_aboutus' => set_value('id_aboutus'),
+  	    'company_name' => set_value('company_name'),
+  	    'company_profile' => set_value('company_profile'),
+  	    'vision' => set_value('vision'),
+  	    'mission' => set_value('mission'),
+  	    'photo_aboutus' => set_value('photo_aboutus'),
+        'page' => 'About Us',
+    	);
+      $this->template->load('administrator/template', 'administrator/view_aboutus_form', $data);
+    }
+
+    public function aboutus_create_action()
+    {
+      cek_session_admin();
+      $this->load->model('Aboutus_model');
+      $this->aboutus_rules();
+        if ($this->form_validation->run() == FALSE) {
+          $this->aboutus_create();
+        } else {
+          $data = array(
+        		'company_name' => $this->input->post('company_name',TRUE),
+        		'company_profile' => $this->input->post('company_profile',TRUE),
+        		'vision' => $this->input->post('vision',TRUE),
+        		'mission' => $this->input->post('mission',TRUE),
+        		'photo_aboutus' => $this->input->post('photo_aboutus',TRUE),
+  	    );
+
+          $this->Aboutus_model->insert_aboutus($data);
+          $this->session->set_flashdata('message', 'Create Record Success');
+          redirect(site_url('administrator/aboutus'));
+        }
+    }
+
+
     public function aboutus_update($id)
     {
-        $this->load->model('Aboutus_model');
-        $row = $this->Aboutus_model->get_aboutus_by_id($id);
-        
-        if ($row) {
-            $data = array(
-                'button' => 'Update',
-                'action' => site_url('administrator/aboutus_update_action'),
-                'id_aboutus' => set_value('id_aboutus', $row->id_aboutus),
-                'company_name' => set_value('company_name', $row->company_name),
-                'company_profile' => set_value('company_profile', $row->company_profile),
-                'vision' => set_value('vision', $row->vision),
-                'mission' => set_value('mission', $row->mission),
-                'photo_aboutus' => set_value('photo_aboutus', $row->photo_aboutus),
-                'page' => 'About Us',
-            );
-            $this->template->load('administrator/template', 'administrator/view_aboutus_form', $data);
-        } else {
-            $this->session->set_flashdata('message', 'Record Not Found');
-            redirect(site_url('administrator/aboutus'));
-        }
+      cek_session_admin();
+      $this->load->model('Aboutus_model');
+      $row = $this->Aboutus_model->get_aboutus_by_id($id);
+
+      if ($row) {
+          $data = array(
+              'button' => 'Update',
+              'action' => site_url('administrator/aboutus_update_action'),
+              'id_aboutus' => set_value('id_aboutus', $row->id_aboutus),
+              'company_name' => set_value('company_name', $row->company_name),
+              'company_profile' => set_value('company_profile', $row->company_profile),
+              'vision' => set_value('vision', $row->vision),
+              'mission' => set_value('mission', $row->mission),
+              'photo_aboutus' => set_value('photo_aboutus', $row->photo_aboutus),
+              'page' => 'About Us',
+          );
+          $this->template->load('administrator/template', 'administrator/view_aboutus_form', $data);
+      } else {
+          $this->session->set_flashdata('message', 'Record Not Found');
+          redirect(site_url('administrator/aboutus'));
+      }
+    }
+
+    public function aboutus_update_action()
+    {
+      cek_session_admin();
+      $this->load->model('Aboutus_model');
+      $this->aboutus_rules();
+      if ($this->form_validation->run() == FALSE) {
+          $this->update_aboutus($this->input->post('id_aboutus', TRUE));
+      } else {
+        $data = array(
+          'company_name' => $this->input->post('company_name',TRUE),
+          'company_profile' => $this->input->post('company_profile',TRUE),
+          'vision' => $this->input->post('vision',TRUE),
+          'mission' => $this->input->post('mission',TRUE),
+          'photo_aboutus' => $this->input->post('photo_aboutus',TRUE),
+        );
+        $this->Aboutus_model->update_aboutus($this->input->post('id_aboutus', TRUE), $data);
+        $this->session->set_flashdata('message', 'Update Record Success');
+        redirect(site_url('administrator/aboutus'));
+      }
+    }
+
+    public function aboutus_delete($id)
+    {
+      cek_session_admin();
+      $this->load->model('Aboutus_model');
+      $row = $this->Aboutus_model->get_aboutus_by_id($id);
+
+      if ($row) {
+        $this->Aboutus_model->delete_aboutus($id);
+        $this->session->set_flashdata('message', 'Delete Record Success');
+        redirect(site_url('administrator/aboutus'));
+      } else {
+        $this->session->set_flashdata('message', 'Record Not Found');
+        redirect(site_url('administrator/aboutus'));
+      }
+    }
+
+    public function aboutus_rules()
+    {
+    	$this->form_validation->set_rules('company_name', 'company name', 'trim|required');
+    	$this->form_validation->set_rules('company_profile', 'company profile', 'trim|required');
+    	$this->form_validation->set_rules('vision', 'vision', 'trim|required');
+    	$this->form_validation->set_rules('mission', 'mission', 'trim|required');
+    	$this->form_validation->set_rules('photo_aboutus', 'photo aboutus', 'trim|required');
+
+    	$this->form_validation->set_rules('id_aboutus', 'id_aboutus', 'trim');
+    	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
 }
