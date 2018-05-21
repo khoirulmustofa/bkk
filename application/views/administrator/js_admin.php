@@ -136,4 +136,30 @@ elseif (isset($page) && $page == 'About Us') {
 			});
 		</script>
 <?php
+}elseif (isset($page) && $page == 'Company') {
+    ?>
+
+<!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script
+	src="<?php echo base_url('template/').template(); ?>/plugins/flex-slider/jquery.flexslider.js"></script>
+<script
+	src="<?php echo base_url('template/').template(); ?>/plugins/ckeditor/ckeditor.js"></script>
+<script
+	src="<?php echo base_url('template/').template(); ?>/plugins/ckeditor/adapters/jquery.js"></script>
+<script
+	src="<?php echo base_url('template/').template(); ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script
+	src="<?php echo base_url('template/').template(); ?>/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+<!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script>
+			jQuery(document).ready(function() {
+				CKEDITOR.disableAutoInline = true;
+		        $('textarea.ckeditor').ckeditor();
+		        $('.date-picker').datepicker({
+		            autoclose: true
+		        });
+				Main.init();
+			});
+		</script>
+<?php
 }?>
